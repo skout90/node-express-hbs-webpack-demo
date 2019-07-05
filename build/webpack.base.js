@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const globImporter = require('node-sass-glob-importer');
 const HtmlWebpackCustomInjectPlugin = require("html-webpack-custominject-plugin");
 const AutoDllPlugin = require("autodll-webpack-plugin");
 
@@ -149,9 +150,14 @@ module.exports = {
         test: /\.(scss|sass)$/,
         // sass-loader => css-loader -> MiniCssExtractPlugin(css 파일로 추출)
         use: [
-          isLocal ? 'style-loader' : MiniCssExtractPlugin.loader,
-          "css-loader"
-          , "sass-loader"
+          isLocal ? "style-loader" : MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              importer: globImporter()
+            }
+          }
         ]
         // exclude: /node_modules/
       },

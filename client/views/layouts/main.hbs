@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{{> include/_copyright-header}}
+<html lang="en">
+
+<head>
+  {{> include/_head}}
+
+  {{{renderSections.styles}}}
+</head>
+
+<body class="mod-bg-1 {{@root.preemptiveclass}}">
+  {{!-- save-settings-script --}}
+  {{> include/_scripts-loading-saving}}
+
+  <!-- BEGIN Page Wrapper --></div>
+  <div class="page-wrapper">
+    <!-- BEGIN Page Header -->
+    {{> include/_page-header }}
+    <!-- END Page Header -->
+    
+    {{{body}}}
+    <hr />
+    <footer>
+      <p>&copy; 2019</p>
+    </footer>
+  </div>
+</body>
+
+</html>
+{{{renderSections.scripts}}}
+{{#eq settings.env "local"}}
+<script src="/reload/reload.js"></script>
+{{/eq}}
