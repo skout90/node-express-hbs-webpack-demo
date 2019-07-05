@@ -10,7 +10,6 @@ const routeCommon = require("../routes/routeCommon");
 module.exports = async function(err, req, res, next) {
   res.status(err.status || 500);
   if (process.env.NODE_ENV === "local") {
-    // 非生产环境 打印错误堆栈信息
     console.log(err.stack);
   }
   if (err.status == 401) {
@@ -28,12 +27,12 @@ module.exports = async function(err, req, res, next) {
       });
     }
     var vm = {};
-    routeCommon.seoInfo(vm, {
-      title: "服务器错误"
+    routeCommon.pageInfo(vm, {
+      title: "서버오류"
     });
     res.status(500);
     vm.errorMsg = err.message;
-    // 不使用模板
+    // 템플릿 사용 안함
     // vm.layout = false;
     res.render("shared/500", vm);
   }

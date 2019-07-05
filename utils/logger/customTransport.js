@@ -32,9 +32,12 @@ module.exports = class CustomTransport extends Transport {
     this.path = `${this.path.replace(/^\//, "")}`;
     InitAxiosInterceptor();
 
-    if(this.enableQueue && this.intervalTime > 0){
+    if (this.enableQueue && this.intervalTime > 0) {
       let logArr = _logQueue.splice(0, this.limit);
-      _timer = setInterval(_logHttpRequest(logArr,() => {}), this.intervalTime)
+      _timer = setInterval(
+        _logHttpRequest(logArr, () => {}),
+        this.intervalTime
+      );
     }
   }
 
@@ -47,7 +50,10 @@ module.exports = class CustomTransport extends Transport {
         } else {
           if (_timer) {
             clearInterval(_timer);
-            _timer = setInterval(_logHttpRequest(logArr,() => {}), this.intervalTime)
+            _timer = setInterval(
+              _logHttpRequest(logArr, () => {}),
+              this.intervalTime
+            );
           }
           this.emit("logged", info);
         }
@@ -57,7 +63,7 @@ module.exports = class CustomTransport extends Transport {
       this._logQueue.push({
         env: process.env.NODE_ENV,
         application: this.application,
-        level: level || 'info',
+        level: level || "info",
         msg: message,
         data: meta
       });
@@ -70,9 +76,11 @@ module.exports = class CustomTransport extends Transport {
   }
 
   InitAxiosInterceptor() {
-    // 添加请求拦截器
+    // 요청 인터셉터
     axios.interceptors.request.use(function(config) {
-      config.baseURL = `${this.ssl ? "https" : "http"}://${this.host}:${this.port}`;
+      config.baseURL = `${this.ssl ? "https" : "http"}://${this.host}:${
+        this.port
+      }`;
       config.headers["X-Requested-With"] = "XMLHttpRequest";
       config.headers = Object.assign(config.headers, this.headers);
       if (this.auth) {
@@ -83,10 +91,13 @@ module.exports = class CustomTransport extends Transport {
   }
 
   _logHttpRequest(logArr, callback) {
-    axios.post(this.path, logArr).then(function(response) {
-      callback(null, response.data);
-    }).catch(function(error) {
-      callback(error);
-    });
+    axios
+      .post(this.path, logArr)
+      .then(function(response) {
+        callback(null, response.data);
+      })
+      .catch(function(error) {
+        callback(error);
+      });
   }
 };
